@@ -1,0 +1,27 @@
+{
+  "name": "next-vue-redux",
+  "version": "0.0.0",
+  "description": "Redux boot enhanced version based on vue2.x and next toolkit.",
+  "homepage": "https://github.com/afeiship/next-vue-redux",
+  "author": {
+    "name": "afei",
+    "email": "1290657123@qq.com"
+  },
+  "main":"index.js",
+  "license": "MIT",
+  "devDependencies": {
+    "del": "^2.2.1",
+    "gulp": "^3.9.1",
+    "gulp-concat": "^2.6.0",
+    "gulp-load-plugins": "^1.2.0",
+    "gulp-rename": "^1.2.2",
+    "gulp-sass": "^2.3.2",
+    "yargs": "^4.7.1"
+  },
+  "dependencies": {
+    "next-js-core2": "github:afeiship/next-js-core2",
+    "next-store": "github:afeiship/next-store",
+    "redux": "^3.6.0",
+    "redux-thunk": "^2.2.0"
+  }
+}

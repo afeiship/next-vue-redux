@@ -10,18 +10,19 @@ var Reducers = require('./redux-reducers');
 
 var ReduxBoot = nx.declare({
   statics:{
-    run:function(inApp,inAppId){
-      return new ReduxBoot(inApp,inAppId);
+    run:function(inApp,inAppId,inOptions){
+      return new ReduxBoot(inApp,inAppId,inOptions);
     }
   },
   methods:{
-    init(inApp,inAppId){
+    init(inApp,inAppId,inOptions){
       this._app = inApp;
       this._store = createStore(
         this.reducers.bind(this),
         applyMiddleware(ReduxThunk)
       );
       this._container ='#'+inAppId;
+      this._options = inOptions || {};
       this.subscribe();
       this.renderTo();
     },
@@ -33,23 +34,24 @@ var ReduxBoot = nx.declare({
       this._store.subscribe(this.renderTo.bind(this));
     },
     renderTo: function() {
-      new Vue({
-        router,
-        render:function(createElement){
-          return createElement(App,{
-              store: this._store,
-              getState:this._store.getState.bind(this),
-              dispatch:this._store.dispatch.bind(this),
-              actions:bindActionCreators(Actions, this._store.dispatch),
-              update: States.getUpdate.bind(this,this._store),
-              root: States.getRoot.bind(this,this._store),
-              memory: States.getMemory.bind(this,this._store),
-              request: States.getRequest.bind(this,this._store),
-              local: States.getLocal.bind(this),
-              session: States.getSession.bind(this),
-          });
-        }
-      }).$mount(this._container);
+      new Vue(
+        Object.assign({
+          render:function(createElement){
+            return createElement(App,{
+                store: this._store,
+                getState:this._store.getState.bind(this),
+                dispatch:this._store.dispatch.bind(this),
+                actions:bindActionCreators(Actions, this._store.dispatch),
+                update: States.getUpdate.bind(this,this._store),
+                root: States.getRoot.bind(this,this._store),
+                memory: States.getMemory.bind(this,this._store),
+                request: States.getRequest.bind(this,this._store),
+                local: States.getLocal.bind(this),
+                session: States.getSession.bind(this),
+            });
+          }
+        },this._options)
+      ).$mount(this._container);
     }
   }
 });

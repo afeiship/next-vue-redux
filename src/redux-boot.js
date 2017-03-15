@@ -3,9 +3,9 @@ var createStore=require('redux').createStore;
 var bindActionCreators=require('redux').bindActionCreators;
 var applyMiddleware = require('redux').applyMiddleware;
 var ReduxThunk = require('redux-thunk').default;
-var States = require('next-redux-base').ReduxStates;
-var Actions = require('next-redux-base').ReduxActions;
-var Reducers = require('next-redux-base').ReduxReducers;
+var States = require('next-redux-base').states;
+var Actions = require('next-redux-base').actions;
+var Reducers = require('next-redux-base').reducers;
 var ReduxAppBase = require('./redux-app-base');
 
 var ReduxBoot = nx.declare({

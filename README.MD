@@ -1,4 +1,4 @@
-#next-react-redux
+# next-vue-redux
 > React redux enhanced version based on next toolkit.
 
 

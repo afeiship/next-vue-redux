@@ -1,3 +1,4 @@
 module.exports = {
-  ReduxBoot:require('./src/redux-boot')
+  ReduxBoot:require('./src/redux-boot'),
+  ReduxAppBase:require('./src/redux-app-base'),
 };

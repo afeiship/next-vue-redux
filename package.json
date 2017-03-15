@@ -23,7 +23,6 @@
     "next-redux-base": "github:afeiship/next-redux-base",
     "next-store": "github:afeiship/next-store",
     "redux": "^3.6.0",
-    "redux-thunk": "^2.2.0",
-    "vue": "^2.2.4"
+    "redux-thunk": "^2.2.0"
   }
 }

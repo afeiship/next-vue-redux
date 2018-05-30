@@ -1,60 +1,139 @@
-var nx = require('next-js-core2');
-var createStore=require('redux').createStore;
-var bindActionCreators=require('redux').bindActionCreators;
-var applyMiddleware = require('redux').applyMiddleware;
-var ReduxThunk = require('redux-thunk').default;
-var States = require('next-redux-base').states;
-var Actions = require('next-redux-base').actions;
-var Reducers = require('next-redux-base').reducers;
-var ReduxAppBase = require('./redux-app-base');
+import Vue from 'vue';
+import nx from 'next-js-core2';
+import { createStore, bindActionCreators } from 'redux';
+import COMMAND from './const';
+import NxStore from 'next-store';
 
-var ReduxBoot = nx.declare({
-  statics:{
-    run:function(inApp,inOptions){
-      return new ReduxBoot(inApp,inOptions);
+const States = require('next-redux-base').states;
+const Actions = require('next-redux-base').actions;
+const Reducers = require('next-redux-base').reducers;
+
+
+const ReduxBoot = nx.declare({
+  statics: {
+    _instance: null,
+    run: function run(inApp, inAppId, inOptions) {
+      var instance = this._instance = this._instance || new ReduxBoot(inApp, inAppId, inOptions);
+      return instance.renderTo();
+    },
+    initialState: function () {
+      return this._instance._app.initialState(NxStore);
     }
   },
-  methods:{
-    init(inApp,inOptions){
+  properties: {
+    root: {
+      set: function (inValue) {
+        this._$actions.root(inValue);
+      },
+      get: function () {
+        return States.getRoot(this._store);
+      }
+    },
+    error: {
+      set: function (inValue) {
+        this._$actions.error(inValue);
+      },
+      get: function () {
+        return States.getError(this._store);
+      }
+    },
+    memory: {
+      set: function (inValue) {
+        this._$actions.memory(inValue);
+      },
+      get: function () {
+        return States.getMemory(this._store);
+      }
+    },
+    request: {
+      set: function (inValue) {
+        this._$actions.request(inValue);
+      },
+      get: function () {
+        return States.getRequest(this._store);
+      }
+    },
+    local: {
+      set: function (inValue) {
+        this._$actions.local(inValue);
+      },
+      get: function () {
+        return States.getLocal();
+      }
+    },
+    session: {
+      set: function (inValue) {
+        this._$actions.session(inValue);
+      },
+      get: function () {
+        return States.getSession();
+      }
+    }
+  },
+  methods: {
+    init: function (inApp, inAppId, inOptions) {
       this._app = inApp;
+      this._options = inOptions;
       this._store = createStore(
-        this.reducers.bind(this),
-        applyMiddleware(ReduxThunk)
+        this.reducers.bind(this)
       );
-      this._options = inOptions || {};
+      this._container = document.getElementById(inAppId);
+      this._$actions = bindActionCreators(Actions, this._store.dispatch);
       this.subscribe();
-      this.renderTo();
     },
-    reducers:function (inState,inAction) {
-      var initialState = this._app.initialState();
-      return Reducers( inState || initialState ,inAction);
+    reducers: function (inState, inAction) {
+      //setPrefix:
+      NxStore.config(this._options.prefix);
+      const initialState = this._app.initialState(NxStore);
+      return Reducers(inState || initialState, inAction, this._options);
     },
-    subscribe: function() {
+    subscribe: function () {
       this._store.subscribe(this.renderTo.bind(this));
     },
-    renderTo: function() {
-      var self = this;
-      Object.assign(ReduxAppBase,{
-        store: self._store,
-        getState:self._store.getState.bind(self),
-        dispatch:self._store.dispatch.bind(self),
-        actions:bindActionCreators(Actions, self._store.dispatch),
-        update: States.getUpdate.bind(self,self._store),
-        root: States.getRoot.bind(self,self._store),
-        memory: States.getMemory.bind(self,self._store),
-        request: States.getRequest.bind(self,self._store),
-        local: States.getLocal.bind(self),
-        session: States.getSession.bind(self),
+    command: function (inName, inData, inContext) {
+      inContext.fire(COMMAND, {
+        name: inName,
+        data: inData
+      }, inContext);
+    },
+    onCommand: function (inName, inHandler, inContext) {
+      var handler = function (inSender, inArgs) {
+        if (inArgs.name === inName) {
+          inHandler.call(inContext, inSender, inArgs.data);
+        }
+      };
+
+      //attache:
+      inContext.on(COMMAND, handler, inContext);
+
+      return {
+        destroy: function () {
+          inContext.off(COMMAND, handler, inContext);
+        }
+      };
+    },
+    renderTo: function () {
+      nx.mix(ReduxAppBase, {
+        store: this._store,
+        getState: this._store.getState.bind(this),
+        dispatch: this._store.dispatch.bind(this),
+        actions: bindActionCreators(Actions, this._store.dispatch),
+        update: States.getUpdate.bind(this, this._store),
+        command: this.command.bind(this),
+        onCommand: this.onCommand.bind(this),
+        $: this
       });
-      new this._options.vue(
-        Object.assign({
-          render:function(createElement){
-            return createElement(self._app);
+
+      this.$vm = new Vue(
+        nx.mix({
+          render: (createElement) => {
+            return createElement(this._app);
           }
-        },this._options)
+        }, this._options)
       );
+      return this;
     }
   }
 });
 
-module.exports = ReduxBoot;
+export default ReduxBoot;

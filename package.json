@@ -1,28 +1,35 @@
 {
   "name": "next-vue-redux",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Redux boot enhanced version based on vue2.x and next toolkit.",
-  "homepage": "https://github.com/afeiship/next-vue-redux",
-  "author": {
-    "name": "afei",
-    "email": "1290657123@qq.com"
-  },
-  "main": "index.js",
+  "main": "dist/index.js",
+  "repository": "git@github.com:afeiship/next-vue-redux.git",
+  "author": "feizheng <1290657123@qq.com>",
   "license": "MIT",
+  "scripts": {
+    "build": "babel src -d dist",
+    "dev": "babel src -d dist -x .js -w"
+  },
   "devDependencies": {
-    "del": "^2.2.1",
-    "gulp": "^3.9.1",
-    "gulp-concat": "^2.6.0",
-    "gulp-load-plugins": "^1.2.0",
-    "gulp-rename": "^1.2.2",
-    "gulp-sass": "^2.3.2",
-    "yargs": "^4.7.1"
+    "babel-cli": "^6.24.1",
+    "babel": "^6.5.2",
+    "babel-core": "^6.0.0",
+    "babel-eslint": "^7.0.0",
+    "babel-plugin-transform-class-properties": "^6.19.0",
+    "babel-plugin-transform-decorators-legacy": "^1.3.4",
+    "babel-plugin-transform-es2015-spread": "^6.22.0",
+    "babel-plugin-transform-object-rest-spread": "^6.23.0",
+    "babel-plugin-transform-async-to-generator": "^6.24.1",
+    "babel-plugin-transform-runtime": "^6.0.0",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-stage-0": "^6.24.1",
+    "babel-register": "^6.0.0"
   },
   "dependencies": {
     "next-js-core2": "github:afeiship/next-js-core2",
     "next-redux-base": "github:afeiship/next-redux-base",
     "next-store": "github:afeiship/next-store",
-    "redux": "^3.6.0",
-    "redux-thunk": "^2.2.0"
+    "redux": "^3.7.2",
+    "vue": "^2.5.16"
   }
 }

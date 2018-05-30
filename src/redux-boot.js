@@ -13,8 +13,8 @@ const Reducers = require('next-redux-base').reducers;
 const ReduxBoot = nx.declare({
   statics: {
     _instance: null,
-    run: function run(inApp, inOptions) {
-      var instance = this._instance = this._instance || new ReduxBoot(inApp, inAppId, inOptions);
+    run: function (inApp, inOptions) {
+      var instance = this._instance = this._instance || new ReduxBoot(inApp, inOptions);
       return instance.renderTo();
     },
     initialState: function () {
@@ -113,19 +113,16 @@ const ReduxBoot = nx.declare({
       };
     },
     renderTo: function () {
-      nx.mix(ReduxAppBase, {
-        store: this._store,
-        getState: this._store.getState.bind(this),
-        dispatch: this._store.dispatch.bind(this),
-        actions: bindActionCreators(Actions, this._store.dispatch),
-        update: States.getUpdate.bind(this, this._store),
-        command: this.command.bind(this),
-        onCommand: this.onCommand.bind(this),
-        $: this
-      });
-
       this.$vm = new Vue(
         nx.mix({
+          store: this._store,
+          getState: this._store.getState.bind(this),
+          dispatch: this._store.dispatch.bind(this),
+          actions: bindActionCreators(Actions, this._store.dispatch),
+          update: States.getUpdate.bind(this, this._store),
+          command: this.command.bind(this),
+          onCommand: this.onCommand.bind(this),
+          $: this,
           render: (createElement) => {
             return createElement(this._app);
           }

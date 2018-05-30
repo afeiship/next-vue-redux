@@ -22,6 +22,10 @@ var _nextStore = require('next-store');
 
 var _nextStore2 = _interopRequireDefault(_nextStore);
 
+var _reduxAppBase = require('./redux-app-base');
+
+var _reduxAppBase2 = _interopRequireDefault(_reduxAppBase);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var States = require('next-redux-base').states;
@@ -132,7 +136,7 @@ var ReduxBoot = _nextJsCore2.default.declare({
     renderTo: function renderTo() {
       var _this = this;
 
-      _nextJsCore2.default.mix(ReduxAppBase, {
+      _nextJsCore2.default.mix(_reduxAppBase2.default, {
         store: this._store,
         getState: this._store.getState.bind(this),
         dispatch: this._store.dispatch.bind(this),

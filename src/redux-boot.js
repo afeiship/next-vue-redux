@@ -3,6 +3,7 @@ import nx from 'next-js-core2';
 import { createStore, bindActionCreators } from 'redux';
 import COMMAND from './const';
 import NxStore from 'next-store';
+import ReduxAppBase from './redux-app-base';
 
 const States = require('next-redux-base').states;
 const Actions = require('next-redux-base').actions;

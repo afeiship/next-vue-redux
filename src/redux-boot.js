@@ -13,7 +13,7 @@ const Reducers = require('next-redux-base').reducers;
 const ReduxBoot = nx.declare({
   statics: {
     _instance: null,
-    run: function run(inApp, inAppId, inOptions) {
+    run: function run(inApp, inOptions) {
       var instance = this._instance = this._instance || new ReduxBoot(inApp, inAppId, inOptions);
       return instance.renderTo();
     },
@@ -72,13 +72,12 @@ const ReduxBoot = nx.declare({
     }
   },
   methods: {
-    init: function (inApp, inAppId, inOptions) {
+    init: function (inApp, inOptions) {
       this._app = inApp;
       this._options = inOptions;
       this._store = createStore(
         this.reducers.bind(this)
       );
-      this._container = document.getElementById(inAppId);
       this._$actions = bindActionCreators(Actions, this._store.dispatch);
       this.subscribe();
     },

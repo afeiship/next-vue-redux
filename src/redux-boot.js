@@ -113,16 +113,19 @@ const ReduxBoot = nx.declare({
       };
     },
     renderTo: function () {
+      nx.mix(this._app, {
+        store: this._store,
+        getState: this._store.getState.bind(this),
+        dispatch: this._store.dispatch.bind(this),
+        actions: bindActionCreators(Actions, this._store.dispatch),
+        update: States.getUpdate.bind(this, this._store),
+        command: this.command.bind(this),
+        onCommand: this.onCommand.bind(this),
+        $: this
+      });
+
       this.$vm = new Vue(
         nx.mix({
-          store: this._store,
-          getState: this._store.getState.bind(this),
-          dispatch: this._store.dispatch.bind(this),
-          actions: bindActionCreators(Actions, this._store.dispatch),
-          update: States.getUpdate.bind(this, this._store),
-          command: this.command.bind(this),
-          onCommand: this.onCommand.bind(this),
-          $: this,
           render: (createElement) => {
             return createElement(this._app);
           }

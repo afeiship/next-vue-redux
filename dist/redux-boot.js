@@ -135,7 +135,7 @@ var ReduxBoot = _nextJsCore2.default.declare({
     renderTo: function renderTo() {
       var _this = this;
 
-      this.$vm = new _vue2.default(_nextJsCore2.default.mix({
+      _nextJsCore2.default.mix(this._app, {
         store: this._store,
         getState: this._store.getState.bind(this),
         dispatch: this._store.dispatch.bind(this),
@@ -143,7 +143,10 @@ var ReduxBoot = _nextJsCore2.default.declare({
         update: States.getUpdate.bind(this, this._store),
         command: this.command.bind(this),
         onCommand: this.onCommand.bind(this),
-        $: this,
+        $: this
+      });
+
+      this.$vm = new _vue2.default(_nextJsCore2.default.mix({
         render: function render(createElement) {
           return createElement(_this._app);
         }

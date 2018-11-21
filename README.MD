@@ -3,3 +3,4 @@
 
 ## resouces:
 + https://github.com/yang-wei/vue-redux
++ https://github.com/hotNoder/vue_redux

@@ -52,6 +52,4 @@ function memory(inData) {
   }
 }
 
-console.dir(Vue);
-
 export { reduxVueBoot, memory };
